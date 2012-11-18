@@ -14,43 +14,62 @@ class Twitter {
     /*  
     * 测试数据
     */
-    public function getTwitterList($cataId, $offset, $limit){
+    public function getTwitterList($cataTopId, $cataId, $offset, $limit){
+		$data			= array();
 		$offset			= (int)$offset;
 		$limit			= (int)$limit;
 		$cataId			= (int)$cataId;
+		$cataTopId		= (int)$cataTopId;
 		$where			= '';
-		if($cataId!=0){
-			$where = " WHERE goods_category_topid='{$cataId}' ";
-			
+
+		$where	= ' WHERE 1=1 ';
+		if($cataTopId!=0){
+			$where .= " AND goods_category_topid='{$cataTopId}' ";
 		}
+		if($cataId!=0){
+			$where .= " AND goods_category_id='{$cataId}' ";
+		}
+		// count
+        $sql            = "SELECT count(*) AS totalNum FROM tb_twitter $where  ";
+        $totalNumD		= DBTwitterHelper::getConn()->read($sql, array() , FALSE) ;
+		$data['totalNum'] = $totalNumD[0]['totalNum'];
+
+		// list
         $sql            = "SELECT * FROM tb_twitter $where  limit {$offset}, {$limit} ";
         $twitterD       = DBTwitterHelper::getConn()->read($sql, array() , FALSE) ;
 		foreach($twitterD as $k=>$v){
-			$twitterIds[] = $v['twitter_id'];
+			$twitterIds[]	= $v['twitter_id'];
+			$arrGoodsId[]	= $v['twitter_goods_id'];
+			$arrUserId[]	= $v['twitter_author_uid'];
 		}
+		$strGoodsId		= implode(',', $arrGoodsId);
+		$strUserId		= implode(',', $arrUserId);
 		if(isset($twitterIds)){
 			$strTwitterIds	= implode(',', $twitterIds);
 			$sql            = "SELECT * FROM tb_twitter_count WHERE twitter_id IN({$strTwitterIds})";
 			$twitterCountD  = DBTwitterHelper::getConn()->read($sql, array() , FALSE);
 
-			$sql            = "SELECT * FROM tb_goods WHERE twitter_id IN({$strTwitterIds})";
+			$sql            = "SELECT * FROM tb_goods WHERE goods_id IN({$strGoodsId})";
 			$goodsD         = DBTwitterHelper::getConn()->read($sql, array() , FALSE);
+			foreach($goodsD as $v){
+				$ginfo[$v['goods_id']] = $v;
+			}
+
+			$sql            = "SELECT user_id, nickname, avatar_c,is_taobao_seller FROM tb_user_account WHERE user_id IN({$strUserId})";
+			$userD          = DBTwitterHelper::getConn()->read($sql, array() , FALSE);
+			foreach($userD as $v){
+				$uinfo[$v['user_id']] = $v;
+			}
 
 			foreach($twitterD as $k=>$v){
+				$data['tInfo'][$k] = array();
 				$data['tInfo'][$k] = $v + $twitterCountD[$k];
-				$data['tInfo'][$k]['ginfo'] = $goodsD[$k];
-				$data['tInfo'][$k]['uinfo'] = array(
-										'user_id'   => 11783173,
-										'nickname'  => '玛丽奥',
-										'avatar_c'  => 'http://imgtest.meiliworks.com/ap/c/e1/5d/0709e46d36ec861aabed3359fa4b_334_334.jpg',
-										'is_taobao_seller' => 0
-									);
+				$data['tInfo'][$k]['ginfo'] = $ginfo[$v['twitter_goods_id']];
+				$data['tInfo'][$k]['uinfo'] = $uinfo[$v['twitter_author_uid']];
 				$data['tInfo'][$k]['comments'] = array();
 			}
 		}
-        $data['totalNum'] = 3000;
 
         return $data;
-
     }
 }

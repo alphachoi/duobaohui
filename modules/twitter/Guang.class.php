@@ -8,6 +8,7 @@ class Guang extends \Snake\Libs\Controller {
 	private $page	= 0;
 	private $frame	= 0;
 	private $cataId = 0;
+	private $cataTopId = 0;
 
 	public function run() {
 		$this->_init();
@@ -18,6 +19,7 @@ class Guang extends \Snake\Libs\Controller {
 
 		!empty($this->request->REQUEST['page'])		&& $this->page = $this->request->REQUEST['page'];
 		!empty($this->request->REQUEST['frame'])	&& $this->frame = $this->request->REQUEST['frame'];
+		!empty($this->request->REQUEST['cata_top_id'])	&& $this->cataTopId = $this->request->REQUEST['cata_top_id'];
 		!empty($this->request->REQUEST['cata_id'])	&& $this->cataId = $this->request->REQUEST['cata_id'];
 	}
 
@@ -25,7 +27,7 @@ class Guang extends \Snake\Libs\Controller {
 		$limit			= 20;
 		$pageFrame		= 6;		// 一页6个 frame
 		$offset			= ($this->page * $pageFrame + $this->frame) * $limit;
-		$aTwitterList	= Twitter::getInstance()->getTwitterList($this->cataId,$offset,$limit);
+		$aTwitterList	= Twitter::getInstance()->getTwitterList($this->cataTopId, $this->cataId, $offset,$limit);
         return $aTwitterList;
 	}
 }

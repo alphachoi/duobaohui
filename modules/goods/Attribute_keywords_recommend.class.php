@@ -2,6 +2,7 @@
 namespace Snake\Modules\Goods;
 Use Snake\Package\Goods\AttrWords;
 Use Snake\Package\Goods\Attribute;
+Use Snake\Package\Goods\Category;
 
 class Attribute_keywords_recommend extends \Snake\Libs\Controller{
 
@@ -10,6 +11,20 @@ class Attribute_keywords_recommend extends \Snake\Libs\Controller{
 	private $num = 20;
 
 	public function run() {
+		$categoryTopId = $this->request->REQUEST['cata_top_id'];
+		if (empty($categoryTopId)) {
+			self::setError(400, 400, 'empty word_id&&word_name');
+			return FALSE;
+		}
+
+		$categoryM = new Category();
+		$response = $categoryM->getCategory($categoryTopId);
+		$this->view = $response;
+
+		return true;
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 		if (!$this->_init()) {
 			return FALSE;	
 		}
