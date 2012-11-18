@@ -1,0 +1,26 @@
+<?php
+namespace Snake\Package\Search;
+
+/**
+ *
+ * @package search 
+ * @author weiwang
+ * @since 2012.08.13
+ */
+
+abstract class DecorateExpr extends SearchExpr{
+
+	/**
+	 * 装饰器类
+	 *
+	 * @var SearchExpr
+	 * @access protected 
+	 */
+	protected $searchExpr;
+
+
+	function __construct(SearchExpr $expr){
+		$this->searchExpr = $expr;
+	}
+
+}
