@@ -21,16 +21,10 @@ class MySQL extends \Snake\Libs\Base\Config {
 			'HOST' => 'localhost',
 			'PORT' => '3306',
 			'USER' => 'root',
-			'PASS' => 'duobaohui',
-			'DB'   => 'duobaohui',
+			'PASS' => 'root',
+			'DB'   => 'duobao',
 		);
-		$config['SLAVES'][] = array(
-			'HOST' => 'localhost',
-			'PORT' => '3306',
-			'USER' => 'root',
-			'PASS' => 'duobaohui',
-			'DB'   => 'duobaohui',
-		);
+		$config['SLAVES'][] = $config['MASTER'];
 		return $config;
 	}
 

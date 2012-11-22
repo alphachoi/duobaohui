@@ -31,7 +31,7 @@ class HttpRequest {
 		$this->request_data['refer']     = isset($this->request_data['headers']['Referer']) ? $this->request_data['headers']['Referer'] : "";
 		$this->request_data['ip']        = $this->getIP(); 
 		$this->request_data['time']      = $_SERVER['REQUEST_TIME'];
-		$this->request_data['seashell']  = $this->getSeashell($_SERVER['HTTP_SEASHELL']);
+		$this->request_data['seashell']  = isset($_SERVER['HTTP_SEASHELL']) ? $this->getSeashell($_SERVER['HTTP_SEASHELL']) : null;
 	}
 
 	public function __get($name) {
@@ -98,7 +98,7 @@ class HttpRequest {
 	}
 
 	private function detectBaseUrl() {
-		$protocol = $_SERVER['HTTPS'] ? 'https://' : 'http://';
+		$protocol = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
 		$host = $_SERVER['SERVER_NAME'];
 		$port = ($_SERVER['SERVER_PORT'] == 80 ? '' : ':' . $_SERVER['SERVER_PORT']);
 		$uri = preg_replace("/\?.*/", '', $_SERVER['REQUEST_URI']);
@@ -141,7 +141,7 @@ class HttpRequest {
 		if (isset($_COOKIE['CHANNEL_FROM'])) {
 			return $_COOKIE['CHANNEL_FROM'];
 		}
-		$url = $this->request_data['refer'];
+		$url = isset($this->request_data['refer']) ? $this->request_data['refer'] : 0;
 		if (empty($url)) {
 			return 0;
 		}

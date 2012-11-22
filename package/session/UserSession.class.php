@@ -107,7 +107,8 @@ class UserSession {
 		if (empty($this->request->COOKIE[$cookie_key]) || $this->request->COOKIE[$cookie_key] == 'deleted') {
 			self::$session_id = \Snake\Libs\Base\Utilities::getUniqueId();
 			setcookie($cookie_key, self::$session_id, 0, DEFAULT_COOKIEPATH, DEFAULT_COOKIEDOMAIN);
-			$this->request->COOKIE[$cookie_key] = self::$session_id;
+			//$this->request->COOKIE[$cookie_key] = self::$session_id;
+			$this->request->COOKIE = array_merge($this->request->COOKIE, array($cookie_key=> self::$session_id));
 			self::$memcache->delete(self::$session_id);
 
 			global $_ZSESSION;

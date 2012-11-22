@@ -159,7 +159,7 @@ class Database {
 			}
 		}
 
-		return $this->connection[$type];
+		return isset($this->connection[$type]) ?  $this->connection[$type] : null;
 	}
 
 	/**

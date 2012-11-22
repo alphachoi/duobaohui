@@ -34,9 +34,6 @@ define('CHANNEL', 'CHANNEL_FROM');
 //海报页加载
 define('FRAME_SIZE_MAX', 6);//加载最大帧数
 define('WIDTH_PAGE_SIZE', 20);//加载最大帧数
-//define for sphinx
-define("SPHINX_SERVER", "172.16.0.111");
-define("SPHINX_PORT", 9312);
 
 /* mlsstorage-kailian */
 $GLOBALS['USEMLSSTORAGE'] = TRUE;

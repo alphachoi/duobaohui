@@ -6,7 +6,7 @@ Use Snake\Package\Person\Helper\DBPersonHelper 	   AS DBPersonHelper;
 class Person {
 	
 	private static $instance = NULL;
-	private $table = 'tb_user_goods';
+	private $table = 'tb_forward_goods';
     
     /** 
      * @return Person Object

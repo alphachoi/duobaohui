@@ -316,8 +316,8 @@ class Utilities {
 		}
 		$remain = crc32($key) % 100; 
 		$remain = abs($remain);
-		$hashKey = $GLOBALS['PICTURE_DOMAINS_ALLOCATION'][$remain];
-		return $GLOBALS['PICTURE_DOMAINS'][$hashKey];
+		$hashKey = isset($GLOBALS['PICTURE_DOMAINS_ALLOCATION'][$remain]) ? $GLOBALS['PICTURE_DOMAINS_ALLOCATION'][$remain] : null;
+		return isset($GLOBALS['PICTURE_DOMAINS'][$hashKey]) ? $GLOBALS['PICTURE_DOMAINS'][$hashKey] : null;
 	}
 
 	public static function timetoWeek($time) {
